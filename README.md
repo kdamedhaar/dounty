@@ -1,14 +1,13 @@
-# Audibox
+# Bookhub
 
+### E-book store built using Ocean Protocol
 
-## Development
+## Getting started
+
+1. Install the required dependencies
 
 ### `npm i`
 
-Installs the required dependencies
+1. Start the app in development mode
 
 ### `npm start`
-
-Launches the app in development mode
-
-

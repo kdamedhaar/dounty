@@ -1,0 +1,12 @@
+.registerContainer {
+  margin: auto;
+  width: 40%;
+}
+
+label {
+  text-align: justify;
+}
+
+.registerForm label {
+  color: #f3f3f3 !important;
+}

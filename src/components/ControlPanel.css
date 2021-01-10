@@ -1,0 +1,17 @@
+.card {
+  margin-top: 20px;
+}
+
+.panel-form {
+  background-color: #fafafa;
+  padding: 5%;
+  text-align: justify;
+  border-radius: 3%;
+}
+
+.control-container {
+  position: fixed;
+  top: 30;
+  left: 20;
+  z-index: 1;
+}

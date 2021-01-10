@@ -6,3 +6,7 @@
 label {
   text-align: justify;
 }
+
+.registerForm label {
+  color: #f3f3f3 !important;
+}

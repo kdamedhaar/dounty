@@ -1,13 +1,13 @@
 .headerContainer {
   padding: 2%;
-  background: #4a5156;
+  background-color: #fafafa;
 
   /* These do the magic */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 4%;
+  height: 10%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -16,7 +16,15 @@
 }
 
 .brand {
-  color: #fff;
+  color: #333258;
+  font-size: 30px;
+}
+.brandContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .topContainer {
   flex: 1;
@@ -41,4 +49,14 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.user {
+  cursor: pointer;
+  background-color: "#f3f3f3";
+}
+
+.publishBtn {
+  background-color: #333258;
+  color: #333258;
 }
