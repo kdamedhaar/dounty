@@ -1,6 +1,6 @@
-# Bookhub
+# Dounty Dapp
 
-### E-book store built using Ocean Protocol
+### Data bounty marketplace built using Ocean Protocol
 
 ## Getting started
 
