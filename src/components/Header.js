@@ -13,7 +13,7 @@ export default function Header({ config, setSearch }) {
     <>
       <header className="headerContainer">
         <Link className="brandContainer" to="/">
-          <Image src={process.env.PUBLIC_URL + "/book-logo.png"} size="tiny" />
+          <Image src={process.env.PUBLIC_URL + "/logo.png"} size="tiny" />
           <p className="brand applogo">Dounty</p>
         </Link>
         <div className="navbarContainer">

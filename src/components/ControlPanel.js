@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Grid, Card, Icon, Form, Radio, Checkbox } from "semantic-ui-react"
 import "./ControlPanel.css"
+import categories from "../categories"
 
 export default function ControlPanel() {
   const [sortby, setSortby] = useState("high")
@@ -83,30 +84,18 @@ export default function ControlPanel() {
               <Form.Field>
                 <h3>Filter by Categories</h3>
               </Form.Field>
-              <Form.Field>
-                <Checkbox
-                  label="New"
-                  value="new"
-                  onChange={() => setNewChecked(!newChecked)}
-                  checked={newChecked}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Checkbox
-                  label="Active"
-                  value="active"
-                  onChange={() => setActiveChecked(!activeChecked)}
-                  checked={activeChecked}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Checkbox
-                  label="Completed"
-                  value="completed"
-                  onChange={() => setCompletedChecked(!completedChecked)}
-                  checked={completedChecked}
-                />
-              </Form.Field>
+              {categories.map(cat => {
+                return (
+                  <Form.Field>
+                    <Checkbox
+                      label={cat.value}
+                      value={cat.value}
+                      onChange={() => setNewChecked(!newChecked)}
+                      checked={newChecked}
+                    />
+                  </Form.Field>
+                )
+              })}
             </Form>
           </Card>
         </Grid.Row>
