@@ -3,7 +3,7 @@ import { Grid, Card, Icon, Form, Radio, Checkbox } from 'semantic-ui-react'
 import './ControlPanel.css'
 import categories from '../categories'
 
-export default function ControlPanel({ setSort }) {
+export default function ControlPanel({ setSort, setFilter }) {
   const [sortby, setSortby] = useState('date')
   const [newChecked, setNewChecked] = useState(true)
   const [activeChecked, setActiveChecked] = useState(true)
@@ -15,6 +15,34 @@ export default function ControlPanel({ setSort }) {
     setSort(value)
   }
 
+  function handleFilter(value) {
+    switch (value) {
+      case 'new':
+        setNewChecked(!newChecked)
+        setFilter({
+          new: !newChecked,
+          active: activeChecked,
+          completedChecked: completedChecked,
+        })
+        break
+      case 'active':
+        setActiveChecked(!activeChecked)
+        setFilter({
+          new: newChecked,
+          active: !activeChecked,
+          completedChecked: completedChecked,
+        })
+        break
+      case 'completed':
+        setCompletedChecked(!completedChecked)
+        setFilter({
+          new: newChecked,
+          active: activeChecked,
+          completedChecked: !completedChecked,
+        })
+        break
+    }
+  }
   return (
     <>
       <Grid className='control-container'>
@@ -60,7 +88,7 @@ export default function ControlPanel({ setSort }) {
                 <Checkbox
                   label='New'
                   value='new'
-                  onChange={() => setNewChecked(!newChecked)}
+                  onChange={() => handleFilter('new')}
                   checked={newChecked}
                 />
               </Form.Field>
@@ -68,7 +96,7 @@ export default function ControlPanel({ setSort }) {
                 <Checkbox
                   label='Active'
                   value='active'
-                  onChange={() => setActiveChecked(!activeChecked)}
+                  onChange={() => handleFilter('active')}
                   checked={activeChecked}
                 />
               </Form.Field>
@@ -76,27 +104,10 @@ export default function ControlPanel({ setSort }) {
                 <Checkbox
                   label='Completed'
                   value='completed'
-                  onChange={() => setCompletedChecked(!completedChecked)}
+                  onChange={() => handleFilter('completed')}
                   checked={completedChecked}
                 />
               </Form.Field>
-            </Form>
-            <Form className='panel-form'>
-              <Form.Field>
-                <h3>Filter by Categories</h3>
-              </Form.Field>
-              {categories.map((cat) => {
-                return (
-                  <Form.Field>
-                    <Checkbox
-                      label={cat.value}
-                      value={cat.value}
-                      onChange={() => setNewChecked(!newChecked)}
-                      checked={newChecked}
-                    />
-                  </Form.Field>
-                )
-              })}
             </Form>
           </Card>
         </Grid.Row>

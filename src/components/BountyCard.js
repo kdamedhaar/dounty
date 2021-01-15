@@ -11,6 +11,7 @@ export default function BountyCard({
   tags,
   description,
   reward,
+  status,
   poster,
 }) {
   return (
@@ -18,6 +19,9 @@ export default function BountyCard({
       <Card fluid style={{ outline: 'none' }}>
         <Card.Content className='cardContent'>
           <Card.Header>{name}</Card.Header>
+          <Card.Meta>
+            <span>Status - {status}</span>
+          </Card.Meta>
           <Card.Description>
             {description.substring(0, 200) + '...'}
           </Card.Description>

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useOcean } from '@oceanprotocol/react'
 import BountyCard from './BountyCard'
 import ControlPanel from './ControlPanel'
-import { orderBy, sortBy } from 'lodash'
+import { orderBy, map } from 'lodash'
 import './Bounties.css'
 import Spinner from './Spinner'
 
@@ -12,6 +12,11 @@ export default function Bounties({ config, myAssets }) {
   const [isLoading, setIsLoading] = useState(true)
   const [bounties, setBounties] = useState([])
   const [sort, setSort] = useState('date')
+  const [filter, setFilter] = useState({
+    new: true,
+    active: true,
+    completed: true,
+  })
   const { accountId } = useOcean()
   let { term } = useParams()
 
@@ -79,7 +84,7 @@ export default function Bounties({ config, myAssets }) {
     )
   }
 
-  function renderBounties() {
+  function sortBounties(bounties) {
     if (sort == 'date') {
       return orderBy(bounties, ['dateCreated'], ['desc'])
     } else if (sort == 'low') {
@@ -87,6 +92,26 @@ export default function Bounties({ config, myAssets }) {
     } else {
       return orderBy(bounties, (item) => parseInt(item.reward), ['desc'])
     }
+  }
+  function filterBounties(bountiesToFilter) {
+    let rawBounties = bountiesToFilter
+    if (!filter.new) {
+      rawBounties = rawBounties.filter((bounty) => bounty.status != 'new')
+    }
+    if (!filter.active) {
+      rawBounties = rawBounties.filter((bounty) => bounty.status != 'active')
+    }
+    if (!filter.completed) {
+      rawBounties = rawBounties.filter((bounty) => bounty.status != 'completed')
+    }
+    return rawBounties
+  }
+
+  function renderBounties() {
+    //sort
+    let bountiesToFilter = sortBounties(bounties)
+    //filter
+    return filterBounties(bountiesToFilter)
   }
 
   function renderRow(it, index) {
@@ -101,6 +126,7 @@ export default function Bounties({ config, myAssets }) {
         reward={it.reward}
         category={it.category}
         description={it.description}
+        status={it.status}
         poster={it.poster}
       />
     )
@@ -111,7 +137,10 @@ export default function Bounties({ config, myAssets }) {
     <Grid divided='vertically' className='container'>
       <Grid.Row>
         <Grid.Column width={5}>
-          <ControlPanel setSort={(e) => setSort(e)} />
+          <ControlPanel
+            setSort={(e) => setSort(e)}
+            setFilter={(e) => setFilter(e)}
+          />
         </Grid.Column>
         <Grid.Column width={9}>
           {renderBounties().map((it, i) => renderRow(it, i))}
