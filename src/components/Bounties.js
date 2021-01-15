@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { Grid, Header, Image, Card, Icon } from "semantic-ui-react"
-import { useParams } from "react-router-dom"
-import { useOcean } from "@oceanprotocol/react"
-import BountyCard from "./BountyCard"
-import ControlPanel from "./ControlPanel"
-import Loader from "react-loader-spinner"
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
-import "./Bounties.css"
-import Spinner from "./Spinner"
+import React, { useEffect, useState } from 'react'
+import { Grid, Header, Image, Card, Icon } from 'semantic-ui-react'
+import { useParams } from 'react-router-dom'
+import { useOcean } from '@oceanprotocol/react'
+import BountyCard from './BountyCard'
+import ControlPanel from './ControlPanel'
+import { orderBy, sortBy } from 'lodash'
+import './Bounties.css'
+import Spinner from './Spinner'
 
 export default function Bounties({ config, myAssets }) {
   const [isLoading, setIsLoading] = useState(true)
   const [bounties, setBounties] = useState([])
+  const [sort, setSort] = useState('date')
   const { accountId } = useOcean()
   let { term } = useParams()
 
@@ -21,11 +21,11 @@ export default function Bounties({ config, myAssets }) {
         const url = `${process.env.REACT_APP_SERVER_URL}/`
         let encodedUrl = encodeURI(url)
         const response = await fetch(encodedUrl, {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
         })
         const res = await response.json()
         console.log(res)
@@ -42,17 +42,17 @@ export default function Bounties({ config, myAssets }) {
   }, [config])
 
   function renderLoader() {
-    return <Spinner text="Getting Bounties ..." />
+    return <Spinner text='Getting Bounties ...' />
   }
 
   async function processData(datasets) {
     return await Promise.all(
-      datasets.map(item => {
+      datasets.map((item) => {
         var metadata = item.service[0]
         if (metadata) {
           if (metadata.attributes) {
             var tags = [],
-              description = ""
+              description = ''
             var { name, author } = metadata.attributes.main
             let extra = metadata.attributes.additionalInformation
             if (extra) {
@@ -71,12 +71,22 @@ export default function Bounties({ config, myAssets }) {
               price: Number(item.price.value).toFixed(2),
               ddo: item,
               did: item.id,
-              description
+              description,
             }
           }
         }
       })
     )
+  }
+
+  function renderBounties() {
+    if (sort == 'date') {
+      return orderBy(bounties, ['dateCreated'], ['desc'])
+    } else if (sort == 'low') {
+      return orderBy(bounties, (item) => parseInt(item.reward), ['asc'])
+    } else {
+      return orderBy(bounties, (item) => parseInt(item.reward), ['desc'])
+    }
   }
 
   function renderRow(it, index) {
@@ -91,23 +101,24 @@ export default function Bounties({ config, myAssets }) {
         reward={it.reward}
         category={it.category}
         description={it.description}
+        poster={it.poster}
       />
     )
   }
   return isLoading ? (
     renderLoader()
   ) : bounties.length ? (
-    <Grid divided="vertically" className="container">
+    <Grid divided='vertically' className='container'>
       <Grid.Row>
         <Grid.Column width={5}>
-          <ControlPanel />
+          <ControlPanel setSort={(e) => setSort(e)} />
         </Grid.Column>
         <Grid.Column width={9}>
-          {bounties.map((it, i) => renderRow(it, i))}
+          {renderBounties().map((it, i) => renderRow(it, i))}
         </Grid.Column>
       </Grid.Row>
     </Grid>
   ) : (
-    <h2 style={{ color: "#f3f3f3", paddingTop: 200 }}>No Bounties found</h2>
+    <h2 style={{ color: '#f3f3f3', paddingTop: 200 }}>No Bounties found</h2>
   )
 }
